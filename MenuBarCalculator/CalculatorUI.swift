@@ -61,6 +61,18 @@ struct CalculatorUI: View {
         }
     }
     
+    func clearValue() {
+        if(calculatorValue == 0) {
+            app.update()
+            return
+        }
+        calculatorValue = 0
+        decimalPlace = 0
+        usingDecimal = false
+        calculatorString = "0"
+        app.update(value: calculatorValue)
+    }
+
     func enableDecimal() {
         if(!usingDecimal) {
             usingDecimal = true
@@ -77,7 +89,7 @@ struct CalculatorUI: View {
                     .font(.largeTitle)
             }.padding(EdgeInsets(top: 20, leading: 0, bottom: 10, trailing: 10))
             HStack(spacing: 1) {
-                Button(action: {}) {
+                Button(action: {clearValue()}) {
                     Text("AC")
                 }.buttonStyle(CalculatorButtonStyle(colorIndex: 2))
                 Button(action: {}) {
