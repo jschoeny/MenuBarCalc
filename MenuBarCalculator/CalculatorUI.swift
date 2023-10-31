@@ -26,6 +26,8 @@ struct CalculatorButtonStyle: ButtonStyle {
 struct CalculatorUI: View {
     @State public var calculatorValue : NSNumber = 0
     @State var calculatorString = "0"
+    @State var decimalPlace : Int = 0
+    @State var usingDecimal : Bool = false
     
     @State var app : AppDelegate
     let numberFormat = NumberFormatter()
@@ -38,6 +40,35 @@ struct CalculatorUI: View {
         numberFormat.minimumFractionDigits = 0
     }
 
+    func appendNumber(_ number: NSNumber) {
+        if(usingDecimal) {
+            decimalPlace += 1
+            calculatorValue = NSNumber(value: calculatorValue.doubleValue + (number.doubleValue / pow(10, Double(decimalPlace))))
+            calculatorString = (numberFormat.string(from: calculatorValue) ?? "0")
+            if(calculatorString.firstIndex(of: ".") == nil) {
+                calculatorString = calculatorString + "."
+            }
+            var realDecimalPlaces = calculatorString.distance(from: calculatorString.firstIndex(of: ".")!, to: calculatorString.endIndex) - 1
+            while(realDecimalPlaces < decimalPlace) {
+                calculatorString = calculatorString + "0"
+                realDecimalPlaces += 1
+            }
+        }
+        else {
+            decimalPlace = 0
+            calculatorValue = NSNumber(value: calculatorValue.doubleValue * 10 + number.doubleValue)
+            calculatorString = (numberFormat.string(from: calculatorValue) ?? "0")
+        }
+    }
+    
+    func enableDecimal() {
+        if(!usingDecimal) {
+            usingDecimal = true
+            decimalPlace = 0
+            calculatorString += "."
+        }
+    }
+    
     var body: some View {
         VStack(spacing: 1) {
             HStack(spacing: 0) {
@@ -60,13 +91,13 @@ struct CalculatorUI: View {
                 }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
             }
             HStack(spacing: 1) {
-                Button(action: {}) {
+                Button(action: {appendNumber(7)}) {
                     Text("7")
                 }
-                Button(action: {}) {
+                Button(action: {appendNumber(8)}) {
                     Text("8")
                 }
-                Button(action: {}) {
+                Button(action: {appendNumber(9)}) {
                     Text("9")
                 }
                 Button(action: {}) {
@@ -74,13 +105,13 @@ struct CalculatorUI: View {
                 }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
             }
             HStack(spacing: 1) {
-                Button(action: {}) {
+                Button(action: {appendNumber(4)}) {
                     Text("4")
                 }
-                Button(action: {}) {
+                Button(action: {appendNumber(5)}) {
                     Text("5")
                 }
-                Button(action: {}) {
+                Button(action: {appendNumber(6)}) {
                     Text("6")
                 }
                 Button(action: {}) {
@@ -88,13 +119,13 @@ struct CalculatorUI: View {
                 }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
             }
             HStack(spacing: 1) {
-                Button(action: {}) {
+                Button(action: {appendNumber(1)}) {
                     Text("1")
                 }
-                Button(action: {}) {
+                Button(action: {appendNumber(2)}) {
                     Text("2")
                 }
-                Button(action: {}) {
+                Button(action: {appendNumber(3)}) {
                     Text("3")
                 }
                 Button(action: {}) {
@@ -102,10 +133,10 @@ struct CalculatorUI: View {
                 }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
             }
             HStack(spacing: 1) {
-                Button(action: {}) {
+                Button(action: {appendNumber(0)}) {
                     Text("0")
                 }.buttonStyle(CalculatorButtonStyle(span: 2))
-                Button(action: {}) {
+                Button(action: {enableDecimal()}) {
                     Text(".")
                 }
                 Button(action: {}) {
