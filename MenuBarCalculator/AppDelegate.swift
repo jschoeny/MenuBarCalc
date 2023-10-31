@@ -16,6 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var statusMenu: NSMenu!
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     var calculatorResult = ""
+    var iconView: NSHostingView<AnyView>!
 
     @IBAction func quitClicked(_ sender: NSMenuItem) {
         NSApplication.shared.terminate(self)
@@ -25,7 +26,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.menu = statusMenu
         // Assign random number to calculatorResult
         calculatorResult = String(Int.random(in: 0...1000))
-        update()
+        
+        let iconSwiftUI = HStack(alignment: .center, content: {
+            Spacer()
+            Image("CalculatorIcon")
+                .resizable()
+                .frame(width: 16, height: 16)
+            Spacer()
+        }).padding(2)
+        
+        iconView = NSHostingView(rootView: AnyView(iconSwiftUI))
+        iconView?.frame = NSRect(x: 0, y: 0, width: (iconView?.intrinsicContentSize.width)!, height: (iconView?.intrinsicContentSize.height)!)
+        statusItem.button?.addSubview(iconView!)
+        statusItem.button?.frame = iconView!.frame
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -48,10 +61,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }).padding(2)
         
-        let iconView = NSHostingView(rootView: iconSwiftUI)
-        iconView.frame = NSRect(x: 0, y: 0, width: iconView.intrinsicContentSize.width, height: iconView.intrinsicContentSize.height)
-        statusItem.button?.addSubview(iconView)
-        statusItem.button?.frame = iconView.frame
+        iconView?.rootView = AnyView(iconSwiftUI)
+        iconView?.frame = NSRect(x: 0, y: 0, width: (iconView?.intrinsicContentSize.width)!, height: (iconView?.intrinsicContentSize.height)!)
+        statusItem.button?.frame = iconView!.frame
     }
 
 }
