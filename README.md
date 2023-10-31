@@ -1,0 +1,1 @@
+# MenuBarCalculator for macOS
