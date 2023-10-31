@@ -15,6 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBOutlet weak var statusMenu: NSMenu!
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    let numberFormat = NumberFormatter()
     var calculatorResult = ""
     var iconView: NSHostingView<AnyView>!
 
@@ -23,9 +24,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        statusItem.menu = statusMenu
-        // Assign random number to calculatorResult
-        calculatorResult = String(Int.random(in: 0...1000))
+        let calculator = CalculatorUI(appDelegate: self)
+        let contentView = NSHostingView(rootView: calculator)
+        contentView.frame = NSRect(x: 0, y: 0, width: 200, height: 325)
+        
+        let menuItem = NSMenuItem()
+        menuItem.view = contentView
+        let menu = NSMenu()
+        menu.addItem(menuItem)
+        
+        statusItem.menu = menu
+        
+        numberFormat.numberStyle = .decimal
+        numberFormat.maximumFractionDigits = 2
+        numberFormat.minimumFractionDigits = 0
+        
+        calculatorResult = numberFormat.string(from: calculator.calculatorValue) ?? ""
         
         let iconSwiftUI = HStack(alignment: .center, content: {
             Spacer()
@@ -45,7 +59,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Insert code here to tear down your application
     }
 
-    func update() {
+    func update(value: NSNumber? = nil) {
+        if(value != nil) {
+            calculatorResult = numberFormat.string(from: value!) ?? ""
+        }
+        else {
+            calculatorResult = ""
+        }
         let iconSwiftUI = HStack(alignment: .center, content: {
             if(calculatorResult.isEmpty) {
                 Spacer()

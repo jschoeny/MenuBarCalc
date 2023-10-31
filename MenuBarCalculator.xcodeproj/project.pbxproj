@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		5529E85D2AF0CB76003FB425 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5529E85C2AF0CB76003FB425 /* MainMenu.xib */; };
+		5529E85F2AF0D12C003FB425 /* CalculatorUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5529E85E2AF0D12C003FB425 /* CalculatorUI.swift */; };
 		D3D961871EADEF91008005CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D961861EADEF91008005CB /* AppDelegate.swift */; };
 		D3D961891EADEF91008005CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3D961881EADEF91008005CB /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5529E85C2AF0CB76003FB425 /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
+		5529E85E2AF0D12C003FB425 /* CalculatorUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorUI.swift; sourceTree = "<group>"; };
 		D3D961831EADEF91008005CB /* MenuBarCalculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MenuBarCalculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3D961861EADEF91008005CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D3D961881EADEF91008005CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -54,6 +56,7 @@
 				D3D961881EADEF91008005CB /* Assets.xcassets */,
 				D3D9618D1EADEF91008005CB /* Info.plist */,
 				5529E85C2AF0CB76003FB425 /* MainMenu.xib */,
+				5529E85E2AF0D12C003FB425 /* CalculatorUI.swift */,
 			);
 			path = MenuBarCalculator;
 			sourceTree = "<group>";
@@ -131,6 +134,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3D961871EADEF91008005CB /* AppDelegate.swift in Sources */,
+				5529E85F2AF0D12C003FB425 /* CalculatorUI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
