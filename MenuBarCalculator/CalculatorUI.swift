@@ -8,6 +8,21 @@
 
 import SwiftUI
 
+struct CalculatorButtonStyle: ButtonStyle {
+    let colors = [Color.gray, Color.orange, Color(red: 0.3, green: 0.3, blue: 0.3)]
+    var colorIndex : Int = 0
+    var span : Int = 1
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .frame(width: 50 * CGFloat(span) + (1 * CGFloat(span-1)), height: 50)
+            .background(colors[colorIndex])
+            .foregroundColor(.white)
+            .cornerRadius(0)
+            .font(.system(size: colorIndex != 1 ? 20 : 26, weight: .semibold, design: .monospaced))
+            .opacity(configuration.isPressed ? 0.5 : 1)
+    }
+}
+
 struct CalculatorUI: View {
     @State public var calculatorValue : NSNumber = 0
     @State var calculatorString = "0"
@@ -33,16 +48,16 @@ struct CalculatorUI: View {
             HStack(spacing: 1) {
                 Button(action: {}) {
                     Text("AC")
-                }
+                }.buttonStyle(CalculatorButtonStyle(colorIndex: 2))
                 Button(action: {}) {
                     Text("+/-")
-                }
+                }.buttonStyle(CalculatorButtonStyle(colorIndex: 2))
                 Button(action: {}) {
                     Text("%")
-                }
+                }.buttonStyle(CalculatorButtonStyle(colorIndex: 2))
                 Button(action: {}) {
                     Text("÷")
-                }
+                }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
             }
             HStack(spacing: 1) {
                 Button(action: {}) {
@@ -56,7 +71,7 @@ struct CalculatorUI: View {
                 }
                 Button(action: {}) {
                     Text("×")
-                }
+                }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
             }
             HStack(spacing: 1) {
                 Button(action: {}) {
@@ -70,7 +85,7 @@ struct CalculatorUI: View {
                 }
                 Button(action: {}) {
                     Text("-")
-                }
+                }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
             }
             HStack(spacing: 1) {
                 Button(action: {}) {
@@ -84,20 +99,21 @@ struct CalculatorUI: View {
                 }
                 Button(action: {}) {
                     Text("+")
-                }
+                }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
             }
             HStack(spacing: 1) {
                 Button(action: {}) {
                     Text("0")
-                }
+                }.buttonStyle(CalculatorButtonStyle(span: 2))
                 Button(action: {}) {
                     Text(".")
                 }
                 Button(action: {}) {
                     Text("=")
-                }
+                }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
             }
         }.padding()
+            .buttonStyle(CalculatorButtonStyle())
             .fixedSize()
             .frame(minWidth: 200, minHeight: 300)
     }
