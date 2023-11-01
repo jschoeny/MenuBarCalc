@@ -23,10 +23,25 @@ struct CalculatorButtonStyle: ButtonStyle {
     }
 }
 
+enum CalculatorOperation {
+    case add
+    case subtract
+    case multiply
+    case divide
+    case none
+    case cancelled
+}
+
 struct CalculatorUI: View {
     @State var calculatorString = "0"
     @State var decimalPlace : Int = 0
     @State var usingDecimal : Bool = false
+    @State var valueEntered : Bool = false
+    @State var valueCalculated : Bool = false
+    @State var pendingSecondaryValue : Bool = false
+    @State var currentOp : CalculatorOperation = .none
+    @State var previousOp : CalculatorOperation = .none
+    @State var previousValue : NSNumber = 0
     
     @State var app : AppDelegate
     let numberFormat = NumberFormatter()
@@ -45,6 +60,27 @@ struct CalculatorUI: View {
     }
 
     func appendNumber(_ number: NSNumber) {
+        valueEntered = true
+        if(pendingSecondaryValue) {
+            app.calculatorValue = 0
+            pendingSecondaryValue = false
+        }
+        if(calculatorString.count >= 20) {
+            return
+        }
+        if(currentOp == .cancelled) {
+            currentOp = .none
+            updateNumber(number)
+            decimalPlace = 0
+            usingDecimal = false
+            return
+        }
+        if(valueCalculated) {
+            app.calculatorValue = 0
+            decimalPlace = 0
+            usingDecimal = false
+            valueCalculated = false
+        }
         if(usingDecimal) {
             decimalPlace += 1
             updateNumber(NSNumber(value: app.calculatorValue.doubleValue + (number.doubleValue / pow(10, Double(decimalPlace)))))
@@ -64,6 +100,28 @@ struct CalculatorUI: View {
     }
     
     func clearValue() {
+        valueEntered = false
+        if(currentOp == .cancelled) {
+            updateNumber(0)
+            if(calculatorString.firstIndex(of: ".") == nil) {
+                decimalPlace = 0
+            }
+            else {
+                decimalPlace = calculatorString.distance(from: calculatorString.firstIndex(of: ".")!, to: calculatorString.endIndex) - 1
+            }
+            return
+        }
+        if(currentOp != .none) {
+            currentOp = .cancelled
+            updateNumber(previousValue)
+            if(calculatorString.firstIndex(of: ".") == nil) {
+                decimalPlace = 0
+            }
+            else {
+                decimalPlace = calculatorString.distance(from: calculatorString.firstIndex(of: ".")!, to: calculatorString.endIndex) - 1
+            }
+            return
+        }
         if(app.calculatorValue == 0) {
             app.update()
             return
@@ -76,6 +134,18 @@ struct CalculatorUI: View {
     }
 
     func enableDecimal() {
+        valueEntered = true
+        if(pendingSecondaryValue) {
+            app.calculatorValue = 0
+            pendingSecondaryValue = false
+        }
+        if(currentOp == .cancelled || valueCalculated) {
+            currentOp = .none
+            updateNumber(0)
+            decimalPlace = 0
+            usingDecimal = false
+            valueCalculated = false
+        }
         if(!usingDecimal) {
             usingDecimal = true
             decimalPlace = 0
@@ -83,6 +153,53 @@ struct CalculatorUI: View {
         }
     }
     
+    func negateValue() {
+        updateNumber(NSNumber(value: -app.calculatorValue.doubleValue))
+    }
+    
+    func percentValue() {
+        updateNumber(NSNumber(value: app.calculatorValue.doubleValue / 100))
+    }
+    
+    func calculateValue() {
+        var op = currentOp
+        if(previousOp != .none) {
+            op = previousOp
+        }
+        let v = app.calculatorValue
+        switch(op) {
+        case .add:
+            updateNumber(NSNumber(value: previousValue.doubleValue + app.calculatorValue.doubleValue))
+            break;
+        case .subtract:
+            updateNumber(NSNumber(value: previousValue.doubleValue - app.calculatorValue.doubleValue))
+            break;
+        case .multiply:
+            updateNumber(NSNumber(value: previousValue.doubleValue * app.calculatorValue.doubleValue))
+            break;
+        case .divide:
+            updateNumber(NSNumber(value: previousValue.doubleValue / app.calculatorValue.doubleValue))
+            break;
+        default:
+            break;
+        }
+        if(previousOp == .none) {
+            previousOp = currentOp
+            previousValue = v
+        }
+        currentOp = .none
+        valueCalculated = true
+    }
+
+    func setOperation(_ op: CalculatorOperation) {
+        previousValue = app.calculatorValue
+        currentOp = op
+        previousOp = .none
+        decimalPlace = 0
+        usingDecimal = false
+        pendingSecondaryValue = true
+    }
+
     var body: some View {
         VStack(spacing: 1) {
             HStack(spacing: 0) {
@@ -92,15 +209,15 @@ struct CalculatorUI: View {
             }.padding(EdgeInsets(top: 20, leading: 0, bottom: 10, trailing: 10))
             HStack(spacing: 1) {
                 Button(action: {clearValue()}) {
-                    Text("AC")
+                    Text(valueEntered ? "C" : "AC")
                 }.buttonStyle(CalculatorButtonStyle(colorIndex: 2))
-                Button(action: {}) {
+                Button(action: {negateValue()}) {
                     Text("+/-")
                 }.buttonStyle(CalculatorButtonStyle(colorIndex: 2))
-                Button(action: {}) {
+                Button(action: {percentValue()}) {
                     Text("%")
                 }.buttonStyle(CalculatorButtonStyle(colorIndex: 2))
-                Button(action: {}) {
+                Button(action: {setOperation(.divide)}) {
                     Text("÷")
                 }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
             }
@@ -114,7 +231,7 @@ struct CalculatorUI: View {
                 Button(action: {appendNumber(9)}) {
                     Text("9")
                 }
-                Button(action: {}) {
+                Button(action: {setOperation(.multiply)}) {
                     Text("×")
                 }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
             }
@@ -128,7 +245,7 @@ struct CalculatorUI: View {
                 Button(action: {appendNumber(6)}) {
                     Text("6")
                 }
-                Button(action: {}) {
+                Button(action: {setOperation(.subtract)}) {
                     Text("-")
                 }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
             }
@@ -142,7 +259,7 @@ struct CalculatorUI: View {
                 Button(action: {appendNumber(3)}) {
                     Text("3")
                 }
-                Button(action: {}) {
+                Button(action: {setOperation(.add)}) {
                     Text("+")
                 }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
             }
@@ -153,7 +270,7 @@ struct CalculatorUI: View {
                 Button(action: {enableDecimal()}) {
                     Text(".")
                 }
-                Button(action: {}) {
+                Button(action: {calculateValue()}) {
                     Text("=")
                 }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
             }
