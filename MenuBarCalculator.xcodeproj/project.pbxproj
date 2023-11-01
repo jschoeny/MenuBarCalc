@@ -239,13 +239,13 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 27GW5YD6XJ;
 				INFOPLIST_FILE = MenuBarCalculator/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "MenuBar Calculator";
+				INFOPLIST_KEY_CFBundleDisplayName = MenuBarCalc;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.jschoeny.MenuBarCalculator;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jschoeny.MenuBarCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
@@ -258,13 +258,13 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 27GW5YD6XJ;
 				INFOPLIST_FILE = MenuBarCalculator/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "MenuBar Calculator";
+				INFOPLIST_KEY_CFBundleDisplayName = MenuBarCalc;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.jschoeny.MenuBarCalculator;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jschoeny.MenuBarCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
