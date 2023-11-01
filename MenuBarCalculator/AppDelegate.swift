@@ -36,6 +36,8 @@ class AppDelegate: NSViewController, NSApplicationDelegate, NSMenuDelegate {
         menu.delegate = self
         menu.identifier = NSUserInterfaceItemIdentifier("Calculator")
         menu.addItem(menuItem)
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(withTitle: "Quit", action: #selector(quitClicked(_:)), keyEquivalent: "")
         
         statusItem.menu = menu
         
