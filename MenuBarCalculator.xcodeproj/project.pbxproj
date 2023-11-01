@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		5529E85D2AF0CB76003FB425 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5529E85C2AF0CB76003FB425 /* MainMenu.xib */; };
 		5529E85F2AF0D12C003FB425 /* CalculatorUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5529E85E2AF0D12C003FB425 /* CalculatorUI.swift */; };
+		5529E8BE2AF22DFD003FB425 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5529E8BD2AF22DFC003FB425 /* ServiceManagement.framework */; };
+		5529E8C32AF23D97003FB425 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 5529E8C22AF23D97003FB425 /* LaunchAtLogin */; };
 		D3D961871EADEF91008005CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D961861EADEF91008005CB /* AppDelegate.swift */; };
 		D3D961891EADEF91008005CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3D961881EADEF91008005CB /* Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -16,6 +18,7 @@
 /* Begin PBXFileReference section */
 		5529E85C2AF0CB76003FB425 /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		5529E85E2AF0D12C003FB425 /* CalculatorUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorUI.swift; sourceTree = "<group>"; };
+		5529E8BD2AF22DFC003FB425 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		D3D961831EADEF91008005CB /* MenuBarCalculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MenuBarCalculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3D961861EADEF91008005CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D3D961881EADEF91008005CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -27,17 +30,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5529E8C32AF23D97003FB425 /* LaunchAtLogin in Frameworks */,
+				5529E8BE2AF22DFD003FB425 /* ServiceManagement.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5529E8BC2AF22DFC003FB425 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5529E8BD2AF22DFC003FB425 /* ServiceManagement.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D3D9617A1EADEF91008005CB = {
 			isa = PBXGroup;
 			children = (
 				D3D961851EADEF91008005CB /* MenuBarCalculator */,
 				D3D961841EADEF91008005CB /* Products */,
+				5529E8BC2AF22DFC003FB425 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -71,12 +85,16 @@
 				D3D9617F1EADEF91008005CB /* Sources */,
 				D3D961801EADEF91008005CB /* Frameworks */,
 				D3D961811EADEF91008005CB /* Resources */,
+				5529E8C42AF23DD8003FB425 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = MenuBarCalculator;
+			packageProductDependencies = (
+				5529E8C22AF23D97003FB425 /* LaunchAtLogin */,
+			);
 			productName = MenuBarCalculator;
 			productReference = D3D961831EADEF91008005CB /* MenuBarCalculator.app */;
 			productType = "com.apple.product-type.application";
@@ -87,7 +105,7 @@
 		D3D9617B1EADEF91008005CB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0800;
+				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Jared Schoeny";
 				TargetAttributes = {
@@ -107,6 +125,9 @@
 				Base,
 			);
 			mainGroup = D3D9617A1EADEF91008005CB;
+			packageReferences = (
+				5529E8C12AF23D97003FB425 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */,
+			);
 			productRefGroup = D3D961841EADEF91008005CB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -127,6 +148,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5529E8C42AF23DD8003FB425 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${BUILT_PRODUCTS_DIR}/LaunchAtLogin_LaunchAtLogin.bundle/Contents/Resources/copy-helper-swiftpm.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D3D9617F1EADEF91008005CB /* Sources */ = {
@@ -292,6 +334,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5529E8C12AF23D97003FB425 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5529E8C22AF23D97003FB425 /* LaunchAtLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5529E8C12AF23D97003FB425 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */;
+			productName = LaunchAtLogin;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D3D9617B1EADEF91008005CB /* Project object */;
 }

@@ -8,7 +8,7 @@
 
 import Cocoa
 import SwiftUI
-
+import LaunchAtLogin
 
 @NSApplicationMain
 class AppDelegate: NSViewController, NSApplicationDelegate, NSMenuDelegate {
@@ -24,6 +24,11 @@ class AppDelegate: NSViewController, NSApplicationDelegate, NSMenuDelegate {
     @IBAction func quitClicked(_ sender: NSMenuItem) {
         NSApplication.shared.terminate(self)
     }
+
+    @IBAction func launchAtLoginClicked(_ sender: NSMenuItem) {
+        LaunchAtLogin.isEnabled = !LaunchAtLogin.isEnabled
+        sender.state = LaunchAtLogin.isEnabled ? .on : .off
+    }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         calculator = CalculatorUI(appDelegate: self)
@@ -37,6 +42,10 @@ class AppDelegate: NSViewController, NSApplicationDelegate, NSMenuDelegate {
         menu.identifier = NSUserInterfaceItemIdentifier("Calculator")
         menu.addItem(menuItem)
         menu.addItem(NSMenuItem.separator())
+        let loginMenuItem = NSMenuItem()
+        loginMenuItem.title = "Open At Login"
+        loginMenuItem.action = #selector(launchAtLoginClicked(_:))
+        menu.addItem(loginMenuItem)
         menu.addItem(withTitle: "Quit", action: #selector(quitClicked(_:)), keyEquivalent: "")
         
         statusItem.menu = menu
