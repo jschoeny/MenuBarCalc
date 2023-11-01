@@ -16,6 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var statusMenu: NSMenu!
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     let numberFormat = NumberFormatter()
+    public var calculatorValue: NSNumber = 0
     var calculatorResult = ""
     var iconView: NSHostingView<AnyView>!
 
@@ -39,7 +40,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         numberFormat.maximumFractionDigits = 2
         numberFormat.minimumFractionDigits = 0
         
-        calculatorResult = numberFormat.string(from: calculator.calculatorValue) ?? ""
+        calculatorResult = numberFormat.string(from: calculatorValue) ?? ""
         
         let iconSwiftUI = HStack(alignment: .center, content: {
             Spacer()

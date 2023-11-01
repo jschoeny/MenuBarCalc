@@ -24,7 +24,6 @@ struct CalculatorButtonStyle: ButtonStyle {
 }
 
 struct CalculatorUI: View {
-    @State public var calculatorValue : NSNumber = 0
     @State var calculatorString = "0"
     @State var decimalPlace : Int = 0
     @State var usingDecimal : Bool = false
@@ -39,12 +38,16 @@ struct CalculatorUI: View {
         numberFormat.maximumFractionDigits = 10
         numberFormat.minimumFractionDigits = 0
     }
+    
+    func updateNumber(_ number: NSNumber) {
+        app.calculatorValue = number
+        calculatorString = (numberFormat.string(from: app.calculatorValue) ?? "0")
+    }
 
     func appendNumber(_ number: NSNumber) {
         if(usingDecimal) {
             decimalPlace += 1
-            calculatorValue = NSNumber(value: calculatorValue.doubleValue + (number.doubleValue / pow(10, Double(decimalPlace))))
-            calculatorString = (numberFormat.string(from: calculatorValue) ?? "0")
+            updateNumber(NSNumber(value: app.calculatorValue.doubleValue + (number.doubleValue / pow(10, Double(decimalPlace)))))
             if(calculatorString.firstIndex(of: ".") == nil) {
                 calculatorString = calculatorString + "."
             }
@@ -56,17 +59,16 @@ struct CalculatorUI: View {
         }
         else {
             decimalPlace = 0
-            calculatorValue = NSNumber(value: calculatorValue.doubleValue * 10 + number.doubleValue)
-            calculatorString = (numberFormat.string(from: calculatorValue) ?? "0")
+            updateNumber(NSNumber(value: app.calculatorValue.doubleValue * 10 + number.doubleValue))
         }
     }
     
     func clearValue() {
-        if(calculatorValue == 0) {
+        if(app.calculatorValue == 0) {
             app.update()
             return
         }
-        calculatorValue = 0
+        app.calculatorValue = 0
         decimalPlace = 0
         usingDecimal = false
         calculatorString = "0"
