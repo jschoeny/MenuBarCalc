@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct CalculatorButtonStyle: ButtonStyle {
-    let colors = [Color.gray, Color.orange, Color(red: 0.3, green: 0.3, blue: 0.3)]
+    let colors = [Color("Gray"), Color("Orange"), Color("Dark Gray"), Color("Orange Selected")]
     var colorIndex : Int = 0
     var span : Int = 1
     func makeBody(configuration: Configuration) -> some View {
