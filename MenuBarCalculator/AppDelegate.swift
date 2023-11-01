@@ -11,7 +11,7 @@ import SwiftUI
 
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSViewController, NSApplicationDelegate, NSMenuDelegate {
 
     @IBOutlet weak var statusMenu: NSMenu!
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -19,19 +19,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     public var calculatorValue: NSNumber = 0
     var calculatorResult = ""
     var iconView: NSHostingView<AnyView>!
+    var calculator: CalculatorUI!
 
     @IBAction func quitClicked(_ sender: NSMenuItem) {
         NSApplication.shared.terminate(self)
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        let calculator = CalculatorUI(appDelegate: self)
+        calculator = CalculatorUI(appDelegate: self)
         let contentView = NSHostingView(rootView: calculator)
         contentView.frame = NSRect(x: 0, y: 0, width: 200, height: 325)
         
         let menuItem = NSMenuItem()
         menuItem.view = contentView
         let menu = NSMenu()
+        menu.delegate = self
+        menu.identifier = NSUserInterfaceItemIdentifier("Calculator")
         menu.addItem(menuItem)
         
         statusItem.menu = menu
@@ -85,6 +88,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         iconView?.rootView = AnyView(iconSwiftUI)
         iconView?.frame = NSRect(x: 0, y: 0, width: (iconView?.intrinsicContentSize.width)!, height: (iconView?.intrinsicContentSize.height)!)
         statusItem.button?.frame = iconView!.frame
+    }
+    
+    func menuDidClose(_ menu: NSMenu) {
+        if(menu.identifier == NSUserInterfaceItemIdentifier("Calculator") && calculatorValue != 0) {
+            update(value: calculatorValue)
+        }
     }
 
 }

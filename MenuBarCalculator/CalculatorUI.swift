@@ -137,7 +137,6 @@ struct CalculatorUI: View {
         decimalPlace = 0
         usingDecimal = false
         calculatorString = "0"
-        app.update(value: calculatorValue)
     }
 
     func enableDecimal() {
