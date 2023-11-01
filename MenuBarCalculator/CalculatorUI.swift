@@ -12,6 +12,7 @@ struct CalculatorButtonStyle: ButtonStyle {
     let colors = [Color("Gray"), Color("Orange"), Color("Dark Gray"), Color("Orange Selected")]
     var colorIndex : Int = 0
     var span : Int = 1
+    var border : Bool = false
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .frame(width: 50 * CGFloat(span) + (1 * CGFloat(span-1)), height: 50)
@@ -20,6 +21,12 @@ struct CalculatorButtonStyle: ButtonStyle {
             .cornerRadius(0)
             .font(.system(size: colorIndex != 1 ? 20 : 26, weight: .semibold, design: .monospaced))
             .opacity(configuration.isPressed ? 0.5 : 1)
+            .overlay(
+                border ?
+                    Rectangle()
+                        .stroke(Color.white, lineWidth: 1)
+                : nil
+            )
     }
 }
 
@@ -205,7 +212,10 @@ struct CalculatorUI: View {
             HStack(spacing: 0) {
                 Spacer()
                 Text(calculatorString)
-                    .font(.largeTitle)
+                    .font(.system(size: 30))
+                    .minimumScaleFactor(0.5)
+                    .lineLimit(1)
+                    .frame(minWidth: 180, maxWidth: 180, minHeight: 40, maxHeight: 40, alignment: .trailing)
             }.padding(EdgeInsets(top: 20, leading: 0, bottom: 10, trailing: 10))
             HStack(spacing: 1) {
                 Button(action: {clearValue()}) {
@@ -219,7 +229,7 @@ struct CalculatorUI: View {
                 }.buttonStyle(CalculatorButtonStyle(colorIndex: 2))
                 Button(action: {setOperation(.divide)}) {
                     Text("÷")
-                }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
+                }.buttonStyle(CalculatorButtonStyle(colorIndex: currentOp == .divide ? 3 : 1, border: currentOp == .divide))
             }
             HStack(spacing: 1) {
                 Button(action: {appendNumber(7)}) {
@@ -233,7 +243,7 @@ struct CalculatorUI: View {
                 }
                 Button(action: {setOperation(.multiply)}) {
                     Text("×")
-                }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
+                }.buttonStyle(CalculatorButtonStyle(colorIndex: currentOp == .multiply ? 3 : 1, border: currentOp == .multiply))
             }
             HStack(spacing: 1) {
                 Button(action: {appendNumber(4)}) {
@@ -247,7 +257,7 @@ struct CalculatorUI: View {
                 }
                 Button(action: {setOperation(.subtract)}) {
                     Text("-")
-                }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
+                }.buttonStyle(CalculatorButtonStyle(colorIndex: currentOp == .subtract ? 3 : 1, border: currentOp == .subtract))
             }
             HStack(spacing: 1) {
                 Button(action: {appendNumber(1)}) {
@@ -261,7 +271,7 @@ struct CalculatorUI: View {
                 }
                 Button(action: {setOperation(.add)}) {
                     Text("+")
-                }.buttonStyle(CalculatorButtonStyle(colorIndex: 1))
+                }.buttonStyle(CalculatorButtonStyle(colorIndex: currentOp == .add ? 3 : 1, border: currentOp == .add))
             }
             HStack(spacing: 1) {
                 Button(action: {appendNumber(0)}) {
