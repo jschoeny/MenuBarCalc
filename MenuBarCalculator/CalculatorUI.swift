@@ -72,7 +72,7 @@ struct CalculatorUI: View {
             app.calculatorValue = 0
             pendingSecondaryValue = false
         }
-        if(calculatorString.count >= 20) {
+        if(calculatorString.replacingOccurrences(of: ",", with: "").count >= 12) {
             return
         }
         if(currentOp == .cancelled) {
@@ -110,12 +110,8 @@ struct CalculatorUI: View {
         valueEntered = false
         if(currentOp == .cancelled) {
             updateNumber(0)
-            if(calculatorString.firstIndex(of: ".") == nil) {
-                decimalPlace = 0
-            }
-            else {
-                decimalPlace = calculatorString.distance(from: calculatorString.firstIndex(of: ".")!, to: calculatorString.endIndex) - 1
-            }
+            decimalPlace = 0
+            usingDecimal = false
             return
         }
         if(currentOp != .none) {
@@ -123,6 +119,7 @@ struct CalculatorUI: View {
             updateNumber(previousValue)
             if(calculatorString.firstIndex(of: ".") == nil) {
                 decimalPlace = 0
+                usingDecimal = false
             }
             else {
                 decimalPlace = calculatorString.distance(from: calculatorString.firstIndex(of: ".")!, to: calculatorString.endIndex) - 1
@@ -142,7 +139,7 @@ struct CalculatorUI: View {
     func enableDecimal() {
         valueEntered = true
         if(pendingSecondaryValue) {
-            app.calculatorValue = 0
+            updateNumber(0)
             pendingSecondaryValue = false
         }
         if(currentOp == .cancelled || valueCalculated) {
@@ -187,9 +184,10 @@ struct CalculatorUI: View {
             updateNumber(NSNumber(value: previousValue.doubleValue / app.calculatorValue.doubleValue))
             break;
         default:
+            updateNumber(v)
             break;
         }
-        if(previousOp == .none) {
+        if(previousOp == .none && currentOp != .none) {
             previousOp = currentOp
             previousValue = v
         }
