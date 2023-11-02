@@ -48,7 +48,6 @@ struct CalculatorUI: View {
     @State var pendingSecondaryValue : Bool = false
     @State var currentOp : CalculatorOperation = .none
     @State var previousOp : CalculatorOperation = .none
-    @State var previousValue : NSNumber = 0
     
     @State var app : AppDelegate
     let numberFormat = NumberFormatter()
@@ -116,7 +115,7 @@ struct CalculatorUI: View {
         }
         if(currentOp != .none) {
             currentOp = .cancelled
-            updateNumber(previousValue)
+            updateNumber(app.previousValue)
             if(calculatorString.firstIndex(of: ".") == nil) {
                 decimalPlace = 0
                 usingDecimal = false
@@ -128,8 +127,9 @@ struct CalculatorUI: View {
         }
         if(app.calculatorValue == 0) {
             app.update()
-            return
+            previousOp = .none
         }
+        app.previousValue = app.calculatorValue
         app.calculatorValue = 0
         decimalPlace = 0
         usingDecimal = false
@@ -166,22 +166,26 @@ struct CalculatorUI: View {
     
     func calculateValue() {
         var op = currentOp
-        if(previousOp != .none) {
+        var a = app.previousValue
+        var b = app.calculatorValue
+        if(previousOp != .none && currentOp == .none) {
             op = previousOp
+            a = app.calculatorValue
+            b = app.previousValue
         }
-        let v = app.calculatorValue
+        let v = NSNumber(value: app.calculatorValue.doubleValue)
         switch(op) {
         case .add:
-            updateNumber(NSNumber(value: previousValue.doubleValue + app.calculatorValue.doubleValue))
+            updateNumber(NSNumber(value: a.doubleValue + b.doubleValue))
             break;
         case .subtract:
-            updateNumber(NSNumber(value: previousValue.doubleValue - app.calculatorValue.doubleValue))
+            updateNumber(NSNumber(value: a.doubleValue - b.doubleValue))
             break;
         case .multiply:
-            updateNumber(NSNumber(value: previousValue.doubleValue * app.calculatorValue.doubleValue))
+            updateNumber(NSNumber(value: a.doubleValue * b.doubleValue))
             break;
         case .divide:
-            updateNumber(NSNumber(value: previousValue.doubleValue / app.calculatorValue.doubleValue))
+            updateNumber(NSNumber(value: a.doubleValue / b.doubleValue))
             break;
         default:
             updateNumber(v)
@@ -189,14 +193,14 @@ struct CalculatorUI: View {
         }
         if(previousOp == .none && currentOp != .none) {
             previousOp = currentOp
-            previousValue = v
+            app.previousValue = v
         }
         currentOp = .none
         valueCalculated = true
     }
 
     func setOperation(_ op: CalculatorOperation) {
-        previousValue = app.calculatorValue
+        app.previousValue = app.calculatorValue
         currentOp = op
         previousOp = .none
         decimalPlace = 0

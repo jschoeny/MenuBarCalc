@@ -17,6 +17,7 @@ class AppDelegate: NSViewController, NSApplicationDelegate, NSMenuDelegate {
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     let numberFormat = NumberFormatter()
     public var calculatorValue: NSNumber = 0
+    public var previousValue : NSNumber = 0
     var calculatorResult = ""
     var iconView: NSHostingView<AnyView>!
     var calculator: CalculatorUI!
