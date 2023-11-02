@@ -36,6 +36,7 @@ enum CalculatorOperation {
     case subtract
     case multiply
     case divide
+    case power
     case none
     case cancelled
 }
@@ -173,6 +174,21 @@ struct CalculatorUI: View {
         updateNumber(NSNumber(value: app.calculatorValue.doubleValue / 100))
     }
     
+    func factorial(_ value: Double) -> Double {
+        if(value == 0) {
+            return 1
+        }
+        else if(value < 0) {
+            return tgamma((-value)+1) * -1
+        }
+        // Calculate the Gamma function for the next integer because gamma(n) = (n-1)!.
+        return tgamma(value+1)
+    }
+
+    func factorialValue() {
+        updateNumber(NSNumber(value: factorial(app.calculatorValue.doubleValue)))
+    }
+    
     func calculateValue() {
         var op = currentOp
         var a = app.previousValue
@@ -195,6 +211,9 @@ struct CalculatorUI: View {
             break;
         case .divide:
             updateNumber(NSNumber(value: a.doubleValue / b.doubleValue))
+            break;
+        case .power:
+            updateNumber(NSNumber(value: pow(a.doubleValue, b.doubleValue)))
             break;
         default:
             updateNumber(v)
@@ -266,6 +285,12 @@ struct CalculatorUI: View {
             break
         case "/":
             setOperation(.divide)
+            break
+        case "^":
+            setOperation(.power)
+            break
+        case "!":
+            factorialValue()
             break
         case "=":
             calculateValue()
