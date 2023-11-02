@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct CalculatorButtonStyle: ButtonStyle {
     let colors = [Color("Gray"), Color("Orange"), Color("Dark Gray"), Color("Orange Selected")]
@@ -39,7 +40,12 @@ enum CalculatorOperation {
     case cancelled
 }
 
+enum Focus : Hashable {
+    case focused
+}
+
 struct CalculatorUI: View {
+    @Namespace var mainNamespace
     @State var calculatorString = "0"
     @State var decimalPlace : Int = 0
     @State var usingDecimal : Bool = false
@@ -48,12 +54,15 @@ struct CalculatorUI: View {
     @State var pendingSecondaryValue : Bool = false
     @State var currentOp : CalculatorOperation = .none
     @State var previousOp : CalculatorOperation = .none
+    @State private var calculatorTyper = ""
+    @FocusState public var focus : Focus?
     
     @State var app : AppDelegate
     let numberFormat = NumberFormatter()
 
     init(appDelegate: AppDelegate) {
         app = appDelegate
+        focus = nil
         
         numberFormat.numberStyle = .decimal
         numberFormat.maximumFractionDigits = 10
@@ -207,17 +216,133 @@ struct CalculatorUI: View {
         usingDecimal = false
         pendingSecondaryValue = true
     }
+    
+    func performButtonPress(key: String) {
+        switch(key) {
+        case "0":
+            appendNumber(0)
+            break
+        case "1":
+            appendNumber(1)
+            break
+        case "2":
+            appendNumber(2)
+            break
+        case "3":
+            appendNumber(3)
+            break
+        case "4":
+            appendNumber(4)
+            break
+        case "5":
+            appendNumber(5)
+            break
+        case "6":
+            appendNumber(6)
+            break
+        case "7":
+            appendNumber(7)
+            break
+        case "8":
+            appendNumber(8)
+            break
+        case "9":
+            appendNumber(9)
+            break
+        case ".":
+            enableDecimal()
+            break
+        case "+":
+            setOperation(.add)
+            break
+        case "-":
+            setOperation(.subtract)
+            break
+        case "x":
+            setOperation(.multiply)
+            break
+        case "*":
+            setOperation(.multiply)
+            break
+        case "/":
+            setOperation(.divide)
+            break
+        case "=":
+            calculateValue()
+            break
+        case "%":
+            percentValue()
+            break
+        case "delete":
+            if(pendingSecondaryValue || valueCalculated) {
+                break
+            }
+            if(usingDecimal) {
+                if(decimalPlace > 0) {
+                    decimalPlace -= 1
+                    let newValue = NSNumber(value: floor(app.calculatorValue.doubleValue * pow(10, Double(decimalPlace))) / pow(10, Double(decimalPlace)))
+                    updateNumber(newValue)
+                }
+                else {
+                    usingDecimal = false
+                    decimalPlace = 0
+                    updateNumber(NSNumber(value: floor(app.calculatorValue.doubleValue)))
+                }
+            }
+            else if(app.calculatorValue == 0) {
+                if(currentOp != .none) {
+                    break
+                }
+                app.update()
+            }
+            else {
+                updateNumber(NSNumber(value: floor(app.calculatorValue.doubleValue / 10)))
+            }
+            if(app.calculatorValue == 0) {
+                valueEntered = false
+            }
+            break
+        default:
+            break
+        }
+    }
 
     var body: some View {
         VStack(spacing: 1) {
             HStack(spacing: 0) {
-                Spacer()
-                Text(calculatorString)
+                TextField("", text: $calculatorTyper)
                     .font(.system(size: 30))
-                    .minimumScaleFactor(0.5)
-                    .lineLimit(1)
                     .frame(minWidth: 180, maxWidth: 180, minHeight: 40, maxHeight: 40, alignment: .trailing)
-            }.padding(EdgeInsets(top: 20, leading: 0, bottom: 10, trailing: 10))
+                    .prefersDefaultFocus(in: mainNamespace)
+                    .focused($focus, equals: .focused)
+                    .opacity(0)
+                    .textSelection(.disabled)
+                    .overlay {
+                        Text(calculatorString)
+                            .font(.system(size: 30))
+                            .minimumScaleFactor(0.5)
+                            .lineLimit(1)
+                            .frame(minWidth: 180, maxWidth: 180, minHeight: 40, maxHeight: 40, alignment: .trailing)
+                    }
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                            focus = .focused
+                        }
+                    }
+                    .onReceive(Just(calculatorTyper)) { newValue in
+                        if(newValue.isEmpty) {
+                            performButtonPress(key: "delete")
+                        }
+                        else {
+                            let val = newValue.replacingOccurrences(of: " ", with: "")
+                            performButtonPress(key: val)
+                        }
+                        calculatorTyper = " "
+                    }
+                    .onSubmit {
+                        calculateValue()
+                    }
+            }.padding(EdgeInsets(top: 20, leading: 10, bottom: 10, trailing: 10))
             HStack(spacing: 1) {
                 Button(action: {clearValue()}) {
                     Text(valueEntered ? "C" : "AC")
