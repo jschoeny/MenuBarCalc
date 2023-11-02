@@ -20,6 +20,8 @@ class AppDelegate: NSViewController, NSApplicationDelegate, NSMenuDelegate {
     var calculatorResult = ""
     var iconView: NSHostingView<AnyView>!
     var calculator: CalculatorUI!
+    var calcMenu = NSMenu()
+    var contextMenu = NSMenu()
 
     @IBAction func quitClicked(_ sender: NSMenuItem) {
         NSApplication.shared.terminate(self)
@@ -32,23 +34,24 @@ class AppDelegate: NSViewController, NSApplicationDelegate, NSMenuDelegate {
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         calculator = CalculatorUI(appDelegate: self)
-        let contentView = NSHostingView(rootView: calculator)
-        contentView.frame = NSRect(x: 0, y: 0, width: 200, height: 325)
         
-        let menuItem = NSMenuItem()
-        menuItem.view = contentView
-        let menu = NSMenu()
-        menu.delegate = self
-        menu.identifier = NSUserInterfaceItemIdentifier("Calculator")
-        menu.addItem(menuItem)
-        menu.addItem(NSMenuItem.separator())
+        calcMenu.delegate = self
+        calcMenu.identifier = NSUserInterfaceItemIdentifier("Calculator")
+        
+        let calculatorView = NSHostingView(rootView: calculator)
+        calculatorView.frame = NSRect(x: 0, y: 0, width: 200, height: 325)
+        let calcMenuItem = NSMenuItem()
+        calcMenuItem.view = calculatorView
+        calcMenu.addItem(calcMenuItem)
+        
+        contextMenu.delegate = self
+        
         let loginMenuItem = NSMenuItem()
         loginMenuItem.title = "Open At Login"
         loginMenuItem.action = #selector(launchAtLoginClicked(_:))
-        menu.addItem(loginMenuItem)
-        menu.addItem(withTitle: "Quit", action: #selector(quitClicked(_:)), keyEquivalent: "")
-        
-        statusItem.menu = menu
+        loginMenuItem.state = LaunchAtLogin.isEnabled ? .on : .off
+        contextMenu.addItem(loginMenuItem)
+        contextMenu.addItem(withTitle: "Quit", action: #selector(quitClicked(_:)), keyEquivalent: "")
         
         numberFormat.numberStyle = .decimal
         numberFormat.maximumFractionDigits = 2
@@ -68,6 +71,19 @@ class AppDelegate: NSViewController, NSApplicationDelegate, NSMenuDelegate {
         iconView?.frame = NSRect(x: 0, y: 0, width: (iconView?.intrinsicContentSize.width)!, height: (iconView?.intrinsicContentSize.height)!)
         statusItem.button?.addSubview(iconView!)
         statusItem.button?.frame = iconView!.frame
+        statusItem.button?.action = #selector(self.statusBarButtonClicked(sender:))
+        statusItem.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
+    }
+    
+    @objc func statusBarButtonClicked(sender: NSStatusBarButton) {
+        let event = NSApp.currentEvent!
+    
+        if event.type ==  NSEvent.EventType.rightMouseUp || event.modifierFlags.contains(.control) {
+            statusItem.menu = contextMenu
+        } else {
+            statusItem.menu = calcMenu
+        }
+        statusItem.button?.performClick(nil)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -102,6 +118,7 @@ class AppDelegate: NSViewController, NSApplicationDelegate, NSMenuDelegate {
     }
     
     func menuDidClose(_ menu: NSMenu) {
+        statusItem.menu = nil
         if(menu.identifier == NSUserInterfaceItemIdentifier("Calculator") && calculatorValue != 0) {
             update(value: calculatorValue)
         }

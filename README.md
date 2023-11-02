@@ -27,6 +27,11 @@ MenuBarCalc is a simple application developed for macOS. It was inspired by the 
 1. Select the desired target in Xcode and press the run button. Or,
 2. Press `⌘R` to build and run the project in Xcode
 
+## Usage
+
+- `Left-click` to open the calculator dropdown
+- `Right-click` to open the context menu (Open At Login, Quit)
+
 # Release History
 
 - 1.0.0
