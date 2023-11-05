@@ -19,13 +19,10 @@ MenuBarCalc is a simple application developed for macOS. It was inspired by the 
 
 ## Install
 
-1. Clone the repo
-2. Open the `.xcodeproj` file in Xcode
-
-## Run
-
-1. Select the desired target in Xcode and press the run button. Or,
-2. Press `⌘R` to build and run the project in Xcode
+1. Download the latest release from [here](/releases/latest)
+2. Open the DMG and drag the app to your Applications folder
+3. Because the app is not signed, you will need to Right-click the app and select Open. Then, click Open in the dialog box that appears.
+4. The app will now appear in your Menu Bar.
 
 ## Usage
 
