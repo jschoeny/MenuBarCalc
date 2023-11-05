@@ -1,0 +1,13 @@
+//
+//  Config.xcconfig
+//  MenuBarCalculator
+//
+//  Created by Jared Schoeny on 11/4/23.
+//  Copyright © 2023 Jared Schoeny. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+BUILD_NUMBER = 202311045
+VERSION = 1.0.0

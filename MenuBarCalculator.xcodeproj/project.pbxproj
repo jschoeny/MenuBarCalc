@@ -19,7 +19,9 @@
 		5529E85C2AF0CB76003FB425 /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		5529E85E2AF0D12C003FB425 /* CalculatorUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorUI.swift; sourceTree = "<group>"; };
 		5529E8BD2AF22DFC003FB425 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
-		D3D961831EADEF91008005CB /* MenuBarCalculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MenuBarCalculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		55825CE72AF7052D003D9CA7 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		55825CEC2AF70881003D9CA7 /* version.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = version.sh; sourceTree = "<group>"; };
+		D3D961831EADEF91008005CB /* MenuBarCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MenuBarCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3D961861EADEF91008005CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D3D961881EADEF91008005CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D3D9618D1EADEF91008005CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,6 +51,8 @@
 		D3D9617A1EADEF91008005CB = {
 			isa = PBXGroup;
 			children = (
+				55825CEC2AF70881003D9CA7 /* version.sh */,
+				55825CE72AF7052D003D9CA7 /* Config.xcconfig */,
 				D3D961851EADEF91008005CB /* MenuBarCalculator */,
 				D3D961841EADEF91008005CB /* Products */,
 				5529E8BC2AF22DFC003FB425 /* Frameworks */,
@@ -58,7 +62,7 @@
 		D3D961841EADEF91008005CB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D3D961831EADEF91008005CB /* MenuBarCalculator.app */,
+				D3D961831EADEF91008005CB /* MenuBarCalc.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -78,9 +82,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D3D961821EADEF91008005CB /* MenuBarCalculator */ = {
+		D3D961821EADEF91008005CB /* MenuBarCalc */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D3D961901EADEF91008005CB /* Build configuration list for PBXNativeTarget "MenuBarCalculator" */;
+			buildConfigurationList = D3D961901EADEF91008005CB /* Build configuration list for PBXNativeTarget "MenuBarCalc" */;
 			buildPhases = (
 				D3D9617F1EADEF91008005CB /* Sources */,
 				D3D961801EADEF91008005CB /* Frameworks */,
@@ -91,12 +95,12 @@
 			);
 			dependencies = (
 			);
-			name = MenuBarCalculator;
+			name = MenuBarCalc;
 			packageProductDependencies = (
 				5529E8C22AF23D97003FB425 /* LaunchAtLogin */,
 			);
-			productName = MenuBarCalculator;
-			productReference = D3D961831EADEF91008005CB /* MenuBarCalculator.app */;
+			productName = MenuBarCalc;
+			productReference = D3D961831EADEF91008005CB /* MenuBarCalc.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -132,7 +136,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D3D961821EADEF91008005CB /* MenuBarCalculator */,
+				D3D961821EADEF91008005CB /* MenuBarCalc */,
 			);
 		};
 /* End PBXProject section */
@@ -276,11 +280,15 @@
 		};
 		D3D961911EADEF91008005CB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 55825CE72AF7052D003D9CA7 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 27GW5YD6XJ;
+				CURRENT_PROJECT_VERSION = "${BUILD_NUMBER}";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = MenuBarCalculator/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MenuBarCalc;
@@ -290,7 +298,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = "${VERSION}";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jschoeny.MenuBarCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -299,11 +307,15 @@
 		};
 		D3D961921EADEF91008005CB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 55825CE72AF7052D003D9CA7 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 27GW5YD6XJ;
+				CURRENT_PROJECT_VERSION = "${BUILD_NUMBER}";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = MenuBarCalculator/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MenuBarCalc;
@@ -313,7 +325,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = "${VERSION}";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jschoeny.MenuBarCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -332,7 +344,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D3D961901EADEF91008005CB /* Build configuration list for PBXNativeTarget "MenuBarCalculator" */ = {
+		D3D961901EADEF91008005CB /* Build configuration list for PBXNativeTarget "MenuBarCalc" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D3D961911EADEF91008005CB /* Debug */,
